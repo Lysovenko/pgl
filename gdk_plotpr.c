@@ -238,7 +238,7 @@ static void (*ploters[PRIMITIVES_SIZE])
   (GdkDrawable *, GdkGC *, pr_scale, void *) =
 {
 NULL, prp_line_gdk, prp_rectangle_gdk, prp_circle_gdk, prp_arc_gdk,
-    prp_text_gdk, prp_sqr_bezier_gdk, NULL, NULL};
+prp_text_gdk, prp_sqr_bezier_gdk, NULL, NULL, NULL};
 void
 prp_step_by_step_gdk (GdkDrawable * drawable, GdkGC * gc, PglPlot * prb)
 {

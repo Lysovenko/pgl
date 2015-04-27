@@ -92,7 +92,7 @@ prp_sqr_bezier_ps (FILE * psf, ps_data * psd, void *prb)
 static void (*ploters[PRIMITIVES_SIZE]) (FILE *, ps_data *, void *) =
 {
 NULL, prp_line_ps, NULL, prp_circle_ps, prp_arc_ps,
-    NULL, prp_sqr_bezier_ps, NULL, NULL};
+NULL, prp_sqr_bezier_ps, NULL, NULL, NULL};
 void
 prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot * prb)
 {
