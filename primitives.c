@@ -184,6 +184,30 @@ pri_sqr_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
   return plt;
 }
 
+PglPlot *
+pri_cub_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
+		pr_point p3, pr_color clr)
+{
+  int size;
+  PRIM_CUB_BEZIER_T *data;
+  size = ((PglPlot *) plt)->size;
+  plt->data = realloc (plt->data,
+		       size + sizeof (PRIM_ITEM_T) +
+		       sizeof (PRIM_CUB_BEZIER_T));
+  ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_CUB_BEZIER;
+  ((PRIM_ITEM_T *) (plt->data + size))->size = sizeof (PRIM_CUB_BEZIER_T);
+  size += sizeof (PRIM_ITEM_T);
+  data = (plt->data + size);
+  data->a = p0;
+  data->b = p1;
+  data->c = p2;
+  data->d = p3;
+  data->clr = clr;
+  size += sizeof (PRIM_CUB_BEZIER_T);
+  plt->size = size;
+  return plt;
+}
+
 /*********************************************/
 PglPlot *
 pri_group_start (PglPlot * plt, PSI group_id)

@@ -80,4 +80,9 @@ typedef struct
   pr_point a, b, c;
   pr_color clr;
 } PRIM_SQR_BEZIER_T;
+typedef struct
+{
+  pr_point a, b, c, d;
+  pr_color clr;
+} PRIM_CUB_BEZIER_T;
 #endif

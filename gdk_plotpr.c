@@ -206,6 +206,50 @@ prp_sqr_bezier_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc,
 }
 
 void
+prp_cub_bezier_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc,
+		    void *prb)
+{
+  GdkColor color;
+  int i, N;
+  pr_point p1, p0, p2, p3, O, A;
+  GdkPoint a, b;
+  PRIM_CUB_BEZIER_T *data;
+  data = (PRIM_CUB_BEZIER_T *) (prb);
+  color.pixel = data->clr;
+  gdk_gc_set_foreground (gc, &color);
+  p0 = data->a;
+  p1 = data->b;
+  p2 = data->c;
+  p3 = data->d;
+  {
+    double l1, l2;
+    a = rescale (psc, p0);
+    b = rescale (psc, p3);
+    l1 = (double) a.x - (double) b.x;
+    l2 = (double) a.y - (double) b.y;
+    N = (int) (sqrt (l1 * l1 + l2 * l2) / 3.);
+  }
+  N += 1;
+  O = p0;
+  for (i = 1; i <= N; i++)
+    {
+      float t, t1, t2, t3, t4;
+      t = (float) i / (float) N;
+      t1 = 1. - t;
+      t2 = 3. * t * t1 * t1;
+      t3 = 3. * t * t * t1;
+      t4 = t* t * t;
+      t1 *= t1 * t1;
+      A.x = t1 * p0.x + t2 * p1.x + t3 * p2.x + t4 * p3.x;
+      A.y = t1 * p0.y + t2 * p1.y + t3 * p2.y + t4 * p3.y;
+      a = rescale (psc, O);
+      b = rescale (psc, A);
+      gdk_draw_line (drawable, gc, a.x, a.y, b.x, b.y);
+      O = A;
+    }
+}
+
+void
 prp_gdk_pointer (GdkWindow * window, PglPlot * prb, pr_point * prp,
 		 GdkModifierType * state)
 {
@@ -238,7 +282,7 @@ static void (*ploters[PRIMITIVES_SIZE])
   (GdkDrawable *, GdkGC *, pr_scale, void *) =
 {
 NULL, prp_line_gdk, prp_rectangle_gdk, prp_circle_gdk, prp_arc_gdk,
-prp_text_gdk, prp_sqr_bezier_gdk, NULL, NULL, NULL};
+prp_text_gdk, prp_sqr_bezier_gdk, prp_cub_bezier_gdk, NULL, NULL};
 void
 prp_step_by_step_gdk (GdkDrawable * drawable, GdkGC * gc, PglPlot * prb)
 {
