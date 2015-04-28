@@ -58,7 +58,7 @@ PglPlot *pri_arc (PglPlot *, pr_point O, pr_real R, pr_real A1, pr_real A2,
 		  pr_color clr);
 PglPlot *pri_sqr_bezier (PglPlot *, pr_point p0, pr_point p1, pr_point p2,
 			 pr_color clr);
-PglPlot *pri_cub_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
+PglPlot *pri_cub_bezier (PglPlot *, pr_point p0, pr_point p1, pr_point p2,
 			 pr_point p3, pr_color clr);
 PglPlot *pri_group_del (PglPlot *, PSI group_id);
 PglPlot *pri_group_end (PglPlot *, PSI group_id);

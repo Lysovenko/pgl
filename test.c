@@ -70,18 +70,13 @@ CreateDraw ()
   /* TEST */
   ext_prb = pri_init (2., 2.);
   {
-    pr_point A = { 0., 0. }, B =
-    {
-    1., 2.}, C =
-    {
-    2., 0.}, D =
-    {
-    1., 1.};
+    pr_point A = { 0., 0. }, B = {1., 2.}, C = {2., 0.}, D = {1., 1.};
     pri_group_start (ext_prb, 555);
-    pri_rectangle (ext_prb, C, D, TRUE, 0x0000FF);
+    pri_rectangle (ext_prb, (pr_point){1.5, 1.5}, D, TRUE, 0x0000FF);
     pri_text (ext_prb, D, 9, 0., "1xt", "Arial", 0xFF00AA);
     pri_group_end (ext_prb, 555);
     pri_sqr_bezier (ext_prb, A, B, C, 0x0F00FF);
+    pri_cub_bezier (ext_prb, A, B, A, C, 0x0F00FF);
     pri_line (ext_prb, A, B, 0xFF0000);
     pri_line (ext_prb, A, D, 0x0F0000);
     pri_line (ext_prb, B, C, 0xFF0000);
