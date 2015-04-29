@@ -22,7 +22,7 @@
 #include <locale.h>
 #include "pgl.h"
 #include "primitives.h"
-pr_point
+static pr_point
 prp_2ps (pr_scale psc, pr_point prp)
 {
   pr_point res;
@@ -31,7 +31,7 @@ prp_2ps (pr_scale psc, pr_point prp)
   return res;
 }
 
-void
+static void
 prp_line_ps (FILE * psf, ps_data * psd, void *prb)
 {
   PRIM_LINE_T *data = (PRIM_LINE_T *) (prb);
@@ -45,14 +45,14 @@ prp_line_ps (FILE * psf, ps_data * psd, void *prb)
   }
 }
 
-void
+static void
 prp_circle_ps (FILE * psf, ps_data * psd, void *prb)
 {
   /* A.x = O.x - R; */
   /* A.y = O.y + R; */
 }
 
-void
+static void
 prp_arc_ps (FILE * psf, ps_data * psd, void *prb)
 {
   /* TODO: Make it working */
@@ -68,7 +68,7 @@ prp_arc_ps (FILE * psf, ps_data * psd, void *prb)
   A2 *= 360. * 64. / M_PI / 2.;
 }
 
-void
+static void
 prp_sqr_bezier_ps (FILE * psf, ps_data * psd, void *prb)
 {
   pr_point p1, p0, p2, cp1, cp2;
@@ -89,10 +89,28 @@ prp_sqr_bezier_ps (FILE * psf, ps_data * psd, void *prb)
   }
 }
 
+static void
+prp_cub_bezier_ps (FILE * psf, ps_data * psd, void *prb)
+{
+  pr_point p1, p0, p2, p3;
+  PRIM_CUB_BEZIER_T *data;
+  data = (PRIM_CUB_BEZIER_T *) (prb);
+  p0 = prp_2ps (psd->psc, data->a);
+  p1 = prp_2ps (psd->psc, data->b);
+  p2 = prp_2ps (psd->psc, data->c);
+  p3 = prp_2ps (psd->psc, data->d);
+  {
+    fprintf (psf, "%g %g moveto\n", p0.x, p0.y);
+    fprintf (psf, "%g %g  %g %g  %g %g curveto\n", p1.x, p1.y, p2.x, p2.y,
+	     p3.x, p3.y);
+    psd->cur_pt = p3;
+  }
+}
+
 static void (*ploters[PRIMITIVES_SIZE]) (FILE *, ps_data *, void *) =
 {
 NULL, prp_line_ps, NULL, prp_circle_ps, prp_arc_ps,
-NULL, prp_sqr_bezier_ps, NULL, NULL, NULL};
+NULL, prp_sqr_bezier_ps, prp_cub_bezier_ps, NULL, NULL};
 void
 prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot * prb)
 {
