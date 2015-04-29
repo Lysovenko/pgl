@@ -238,7 +238,7 @@ prp_cub_bezier_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc,
       t1 = 1. - t;
       t2 = 3. * t * t1 * t1;
       t3 = 3. * t * t * t1;
-      t4 = t* t * t;
+      t4 = t * t * t;
       t1 *= t1 * t1;
       A.x = t1 * p0.x + t2 * p1.x + t3 * p2.x + t4 * p3.x;
       A.y = t1 * p0.y + t2 * p1.y + t3 * p2.y + t4 * p3.y;
@@ -282,7 +282,7 @@ static void (*ploters[PRIMITIVES_SIZE])
   (GdkDrawable *, GdkGC *, pr_scale, void *) =
 {
 NULL, prp_line_gdk, prp_rectangle_gdk, prp_circle_gdk, prp_arc_gdk,
-prp_text_gdk, prp_sqr_bezier_gdk, prp_cub_bezier_gdk, NULL, NULL};
+    prp_text_gdk, prp_sqr_bezier_gdk, prp_cub_bezier_gdk, NULL, NULL};
 void
 prp_step_by_step_gdk (GdkDrawable * drawable, GdkGC * gc, PglPlot * prb)
 {
