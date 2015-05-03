@@ -78,5 +78,8 @@ typedef struct
   pr_point a, b, c, d;
 } PRIM_CUB_BEZIER_T;
 typedef struct
-{} PRIM_SETTINGS;
+{
+  pr_color edge_color, body_color;
+  pr_real edge_width;
+} PRIM_SETTINGS;
 #endif

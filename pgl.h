@@ -19,7 +19,7 @@
 
 #ifndef __PGL_H__
 #define __PGL_H__
-#include <stdio.h>
+
 typedef double pr_real;
 typedef struct
 {

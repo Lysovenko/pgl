@@ -18,7 +18,9 @@
  */
 
 #include <math.h>
+#include <glib.h>
 #include <stdio.h>
+#include <glib/gprintf.h>
 #include <locale.h>
 #include "pgl.h"
 #include "primitives.h"
@@ -39,8 +41,8 @@ prp_line_ps (FILE * psf, ps_data * psd, void *prb)
   A = prp_2ps (psd->psc, data->a);
   B = prp_2ps (psd->psc, data->b);
   {
-    fprintf (psf, "%g %g moveto\n", A.x, A.y);
-    fprintf (psf, "%g %g lineto\n", B.x, B.y);
+    g_fprintf (psf, "%g %g moveto\n", A.x, A.y);
+    g_fprintf (psf, "%g %g lineto\n", B.x, B.y);
     psd->cur_pt = B;
   }
 }
@@ -55,17 +57,18 @@ prp_circle_ps (FILE * psf, ps_data * psd, void *prb)
 static void
 prp_arc_ps (FILE * psf, ps_data * psd, void *prb)
 {
-  /* TODO: Make it working */
-  pr_point O, A;
-  PRIM_ARC_T *data = (PRIM_ARC_T *) (prb);
-  pr_real R = data->r, A1 = data->alpha, A2 = data->beta;
-  A.x = O.x - R;
-  A.y = O.y + R;
-  A2 = A2 - A1;
-  if (A2 < 0.)
-    A2 += 2. * M_PI;
-  A1 *= 360. * 64. / M_PI / 2.;
-  A2 *= 360. * 64. / M_PI / 2.;
+/* TODO: Make it working */
+pr_point O={0,0}, A;
+PRIM_ARC_T *data = (PRIM_ARC_T *) (prb);
+pr_real R = data->r, A1 = data->alpha, A2 = data->beta;
+A.x = O.x - R;
+A.y = O.y + R;
+A2 = A2 - A1;
+if (A2 < 0.)
+  A2 += 2. * M_PI;
+A1 *= 360. * 64. / M_PI / 2.;
+A2 *= 360. * 64. / M_PI / 2.;
+g_fprintf(psf, "%% arc %g %g %g %g Not Implemented\n", A.x, A.y, A1, A2);
 }
 
 static void
@@ -82,8 +85,8 @@ prp_sqr_bezier_ps (FILE * psf, ps_data * psd, void *prb)
   cp2.x = cp1.x + 1. / 3. * (p2.x - p0.x);
   cp2.y = cp1.y + 1. / 3. * (p2.y - p0.y);
   {
-    fprintf (psf, "%g %g moveto\n", p0.x, p0.y);
-    fprintf (psf, "%g %g  %g %g  %g %g curveto\n", cp1.x, cp1.y, cp2.x, cp2.y,
+    g_fprintf (psf, "%g %g moveto\n", p0.x, p0.y);
+    g_fprintf (psf, "%g %g  %g %g  %g %g curveto\n", cp1.x, cp1.y, cp2.x, cp2.y,
 	     p2.x, p2.y);
     psd->cur_pt = p2;
   }
@@ -100,8 +103,8 @@ prp_cub_bezier_ps (FILE * psf, ps_data * psd, void *prb)
   p2 = prp_2ps (psd->psc, data->c);
   p3 = prp_2ps (psd->psc, data->d);
   {
-    fprintf (psf, "%g %g moveto\n", p0.x, p0.y);
-    fprintf (psf, "%g %g  %g %g  %g %g curveto\n", p1.x, p1.y, p2.x, p2.y,
+    g_fprintf (psf, "%g %g moveto\n", p0.x, p0.y);
+    g_fprintf (psf, "%g %g  %g %g  %g %g curveto\n", p1.x, p1.y, p2.x, p2.y,
 	     p3.x, p3.y);
     psd->cur_pt = p3;
   }
@@ -151,7 +154,7 @@ prp_step_by_step_eps (FILE * psf, pr_scale psc, PglPlot * prb)
   prp_step_by_step_BB (&bBox, prb);
   psd.psc.x = -bBox.ll.x;
   psd.psc.y = -bBox.ll.y;
-  fprintf (psf,
+  g_fprintf (psf,
 	   "%%!PS-Adobe-2.0 EPSF-2.0\n%%%%Creator: pgl\n"
 	   "%%%%BoundingBox: 0 0 %g %g\n%%%%EndComments\n",
 	   (bBox.ur.x + psd.psc.x) * psd.psc.K,
