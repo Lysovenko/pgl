@@ -122,7 +122,7 @@ void
 prp_text_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
 {
   pr_point O;
-  pr_real S, A1;
+  pr_real S;
   GdkPoint o;
   PRIM_TEXT_T *data;
   gchar *font;
@@ -142,7 +142,6 @@ prp_text_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
   cairo_set_source (cr, pattern);
   O = data->o;
   S = data->s;
-  A1 = data->alpha;
   font = g_strdup_printf ("%s 10", data->family);
   g_print ("size=%g; (%g;%g) text=\"%s\" f=\"%s\"\n", S, O.x, O.y, data->text,
 	   font);
@@ -270,6 +269,10 @@ prp_step_by_step_gdk (GdkDrawable * drawable, GdkGC * gc, PglPlot * prb)
   pr_scale psc;
   int H, W;
   pr_real h, w;
+  GdkColor color;
+
+  color.pixel = 0;
+  gdk_gc_set_foreground (gc, &color);
   h = prb->h;
   w = prb->w;
   gdk_window_get_geometry ((GdkWindow *) drawable, 0, 0, &W, &H, 0);

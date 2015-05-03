@@ -15,4 +15,3 @@ gdk_plotpr.o:gdk_plotpr.c
 
 test: test.c
 	gcc -o test  test.c $(QINC) `echo $$LD_LIBRARY_PATH | sed -e 's/^/-L/;s/:/ -L/g'` -lpgl $(GTKLIBS) $(GTKFLAGS) $(DEBUG)
-#.PHONY: test testel gtk sbs show
