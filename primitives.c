@@ -18,14 +18,14 @@
  */
 
 #include <math.h>
-#include <stdlib.h>
+#include <glib.h>
 #include <string.h>
 #include "primitives.h"
 PglPlot *
 pri_init (pr_real w, pr_real h)
 {
   PglPlot *plt;
-  plt = malloc (sizeof (PglPlot));
+  plt = g_malloc (sizeof (PglPlot));
   plt->size = 0;
   plt->data = NULL;
   plt->w = w;
@@ -40,7 +40,7 @@ pri_line (PglPlot * plt, pr_point A, pr_point B)
   PRIM_LINE_T *data;
   size = plt->size;
   plt->data =
-    realloc (plt->data, size + sizeof (PRIM_ITEM_T) + sizeof (PRIM_LINE_T));
+    g_realloc (plt->data, size + sizeof (PRIM_ITEM_T) + sizeof (PRIM_LINE_T));
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_LINE;
   ((PRIM_ITEM_T *) (plt->data + size))->size = sizeof (PRIM_LINE_T);
   size += sizeof (PRIM_ITEM_T);
@@ -59,7 +59,7 @@ pri_rectangle (PglPlot * plt, pr_point A, pr_point B, PSI fill)
   PRIM_RECTANGLE_T *data;
   size = plt->size;
   plt->data =
-    realloc (plt->data,
+    g_realloc (plt->data,
 	     size + sizeof (PRIM_ITEM_T) + sizeof (PRIM_RECTANGLE_T));
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_RECTANGLE;
   ((PRIM_ITEM_T *) (plt->data + size))->size = sizeof (PRIM_RECTANGLE_T);
@@ -80,7 +80,7 @@ pri_circle (PglPlot * plt, pr_point O, pr_real R)
   PRIM_CIRCLE_T *data;
   size = plt->size;
   plt->data =
-    realloc (plt->data, size + sizeof (PRIM_ITEM_T) + sizeof (PRIM_CIRCLE_T));
+    g_realloc (plt->data, size + sizeof (PRIM_ITEM_T) + sizeof (PRIM_CIRCLE_T));
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_CIRCLE;
   ((PRIM_ITEM_T *) (plt->data + size))->size = sizeof (PRIM_CIRCLE_T);
   size += sizeof (PRIM_ITEM_T);
@@ -105,7 +105,7 @@ pri_arc (PglPlot * plt, pr_point O, pr_real R, pr_real A1, pr_real A2)
   if (bet < 0.)
     bet += 2. * M_PI;
   size = ((PglPlot *) plt)->size;
-  plt->data = realloc (plt->data,
+  plt->data = g_realloc (plt->data,
 		       size + sizeof (PRIM_ITEM_T) + sizeof (PRIM_ARC_T));
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_ARC;
   ((PRIM_ITEM_T *) (plt->data + size))->size = sizeof (PRIM_ARC_T);
@@ -133,7 +133,7 @@ pri_text (PglPlot * plt, pr_point O, pr_real S, pr_real A1,
   if (alp < 0.)
     alp += 2. * M_PI;
   size = ((PglPlot *) plt)->size;
-  plt->data = realloc (plt->data,
+  plt->data = g_realloc (plt->data,
 		       size + sizeof (PRIM_ITEM_T) + sizeof (PRIM_TEXT_T) +
 		       slen + flen);
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_TEXT;
@@ -161,7 +161,7 @@ pri_sqr_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2)
   int size;
   PRIM_SQR_BEZIER_T *data;
   size = ((PglPlot *) plt)->size;
-  plt->data = realloc (plt->data,
+  plt->data = g_realloc (plt->data,
 		       size + sizeof (PRIM_ITEM_T) +
 		       sizeof (PRIM_SQR_BEZIER_T));
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_SQR_BEZIER;
@@ -183,7 +183,7 @@ pri_cub_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
   int size;
   PRIM_CUB_BEZIER_T *data;
   size = ((PglPlot *) plt)->size;
-  plt->data = realloc (plt->data,
+  plt->data = g_realloc (plt->data,
 		       size + sizeof (PRIM_ITEM_T) +
 		       sizeof (PRIM_CUB_BEZIER_T));
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_CUB_BEZIER;
@@ -206,7 +206,7 @@ pri_group_start (PglPlot * plt, PSI group_id)
   int size;
   PSI *data;
   size = plt->size;
-  plt->data = realloc (plt->data, size + sizeof (PRIM_ITEM_T) + sizeof (PSI));
+  plt->data = g_realloc (plt->data, size + sizeof (PRIM_ITEM_T) + sizeof (PSI));
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_GROUP_START;
   ((PRIM_ITEM_T *) (plt->data + size))->size = sizeof (PSI);
   size += sizeof (PRIM_ITEM_T);
@@ -223,7 +223,7 @@ pri_group_end (PglPlot * plt, PSI group_id)
   int size;
   PSI *data;
   size = plt->size;
-  plt->data = realloc (plt->data, size + sizeof (PRIM_ITEM_T) + sizeof (PSI));
+  plt->data = g_realloc (plt->data, size + sizeof (PRIM_ITEM_T) + sizeof (PSI));
   ((PRIM_ITEM_T *) (plt->data + size))->type = PRIM_GROUP_END;
   ((PRIM_ITEM_T *) (plt->data + size))->size = sizeof (PSI);
   size += sizeof (PRIM_ITEM_T);
@@ -261,7 +261,7 @@ pri_group_del (PglPlot * plt, PSI group_id)
 	      if (end > start)
 		{
 		  memmove (plt->data + start, plt->data + end, size - end);
-		  plt->data = realloc (plt->data, size - (end - start));
+		  plt->data = g_realloc (plt->data, size - (end - start));
 		  size -= end - start;
 		  position -= end - start;
 		  start = end = 0;
@@ -279,7 +279,7 @@ void
 pri_clear (PglPlot * plt)
 {
   if (plt->data)
-    free (plt->data);
+    g_free (plt->data);
   plt->data = NULL;
   plt->size = 0;
 }

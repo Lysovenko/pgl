@@ -77,4 +77,6 @@ typedef struct
 {
   pr_point a, b, c, d;
 } PRIM_CUB_BEZIER_T;
+typedef struct
+{} PRIM_SETTINGS;
 #endif
