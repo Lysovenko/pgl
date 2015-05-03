@@ -34,7 +34,7 @@ pri_init (pr_real w, pr_real h)
 }
 
 PglPlot *
-pri_line (PglPlot * plt, pr_point A, pr_point B, pr_color clr)
+pri_line (PglPlot * plt, pr_point A, pr_point B)
 {
   int size;
   PRIM_LINE_T *data;
@@ -47,14 +47,13 @@ pri_line (PglPlot * plt, pr_point A, pr_point B, pr_color clr)
   data = (plt->data + size);
   data->a = A;
   data->b = B;
-  data->clr = clr;
   size += sizeof (PRIM_LINE_T);
   plt->size = size;
   return plt;
 }
 
 PglPlot *
-pri_rectangle (PglPlot * plt, pr_point A, pr_point B, PSI fill, pr_color clr)
+pri_rectangle (PglPlot * plt, pr_point A, pr_point B, PSI fill)
 {
   int size;
   PRIM_RECTANGLE_T *data;
@@ -68,7 +67,6 @@ pri_rectangle (PglPlot * plt, pr_point A, pr_point B, PSI fill, pr_color clr)
   data = (plt->data + size);
   data->a = A;
   data->b = B;
-  data->clr = clr;
   data->fill = fill;
   size += sizeof (PRIM_RECTANGLE_T);
   plt->size = size;
@@ -76,7 +74,7 @@ pri_rectangle (PglPlot * plt, pr_point A, pr_point B, PSI fill, pr_color clr)
 }
 
 PglPlot *
-pri_circle (PglPlot * plt, pr_point O, pr_real R, pr_color clr)
+pri_circle (PglPlot * plt, pr_point O, pr_real R)
 {
   int size;
   PRIM_CIRCLE_T *data;
@@ -89,15 +87,13 @@ pri_circle (PglPlot * plt, pr_point O, pr_real R, pr_color clr)
   data = (plt->data + size);
   data->o = O;
   data->r = R;
-  data->clr = clr;
   size += sizeof (PRIM_CIRCLE_T);
   plt->size = size;
   return plt;
 }
 
 PglPlot *
-pri_arc (PglPlot * plt, pr_point O, pr_real R, pr_real A1, pr_real A2,
-	 pr_color clr)
+pri_arc (PglPlot * plt, pr_point O, pr_real R, pr_real A1, pr_real A2)
 {
   int size;
   pr_real alp, bet;
@@ -119,7 +115,6 @@ pri_arc (PglPlot * plt, pr_point O, pr_real R, pr_real A1, pr_real A2,
   data->r = R;
   data->alpha = alp;
   data->beta = bet;
-  data->clr = clr;
   size += sizeof (PRIM_ARC_T);
   plt->size = size;
   return plt;
@@ -127,7 +122,7 @@ pri_arc (PglPlot * plt, pr_point O, pr_real R, pr_real A1, pr_real A2,
 
 PglPlot *
 pri_text (PglPlot * plt, pr_point O, pr_real S, pr_real A1,
-	  const char *text, const char *family, pr_color clr)
+	  const char *text, const char *family)
 {
   int size, /* szi, */ slen, flen;
   pr_real alp;
@@ -149,7 +144,6 @@ pri_text (PglPlot * plt, pr_point O, pr_real S, pr_real A1,
   data->o = O;
   data->s = S;
   data->alpha = alp;
-  data->clr = clr;
   size += sizeof (PRIM_TEXT_T);
   data->text = plt->data + size;
   strcpy (data->text, text);
@@ -162,8 +156,7 @@ pri_text (PglPlot * plt, pr_point O, pr_real S, pr_real A1,
 }
 
 PglPlot *
-pri_sqr_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
-		pr_color clr)
+pri_sqr_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2)
 {
   int size;
   PRIM_SQR_BEZIER_T *data;
@@ -178,7 +171,6 @@ pri_sqr_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
   data->a = p0;
   data->b = p1;
   data->c = p2;
-  data->clr = clr;
   size += sizeof (PRIM_SQR_BEZIER_T);
   plt->size = size;
   return plt;
@@ -186,7 +178,7 @@ pri_sqr_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
 
 PglPlot *
 pri_cub_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
-		pr_point p3, pr_color clr)
+		pr_point p3)
 {
   int size;
   PRIM_CUB_BEZIER_T *data;
@@ -202,7 +194,6 @@ pri_cub_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
   data->b = p1;
   data->c = p2;
   data->d = p3;
-  data->clr = clr;
   size += sizeof (PRIM_CUB_BEZIER_T);
   plt->size = size;
   return plt;

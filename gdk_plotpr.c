@@ -34,14 +34,11 @@ rescale (pr_scale psc, pr_point prp)
 void
 prp_line_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
 {
-  GdkColor color;
   GdkPoint a, b;
   PRIM_LINE_T *data;
   data = (PRIM_LINE_T *) (prb);
-  color.pixel = data->clr;
   a = rescale (psc, data->a);
   b = rescale (psc, data->b);
-  gdk_gc_set_foreground (gc, &color);
   gdk_draw_line (drawable, gc, a.x, a.y, b.x, b.y);
 }
 
@@ -49,12 +46,10 @@ void
 prp_rectangle_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc,
 		   void *prb)
 {
-  GdkColor color;
   GdkPoint a, b;
   PRIM_RECTANGLE_T *data;
   gint x, y, w, h;
   data = (PRIM_RECTANGLE_T *) (prb);
-  color.pixel = data->clr;
   a = rescale (psc, data->a);
   b = rescale (psc, data->b);
   if (a.x < b.x)
@@ -77,42 +72,36 @@ prp_rectangle_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc,
       y = b.y;
       h = a.y - b.y;
     }
-  gdk_gc_set_foreground (gc, &color);
   gdk_draw_rectangle (drawable, gc, (gboolean) data->fill, x, y, w, h);
 }
 
 void
 prp_circle_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
 {
-  GdkColor color;
   int r;
   pr_point O, A;
   pr_real R;
   GdkPoint a;
   PRIM_CIRCLE_T *data;
   data = (PRIM_CIRCLE_T *) (prb);
-  color.pixel = data->clr;
   O = data->o;
   R = data->r;
   A.x = O.x - R;
   A.y = O.y + R;
   a = rescale (psc, A);
   r = (int) (2. * (R * psc.K + .5));
-  gdk_gc_set_foreground (gc, &color);
   gdk_draw_arc (drawable, gc, FALSE, a.x, a.y, r, r, 0., 360. * 64.);
 }
 
 void
 prp_arc_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
 {
-  GdkColor color;
   int r;
   pr_point O, A;
   pr_real R, A1, A2;
   GdkPoint a;
   PRIM_ARC_T *data;
   data = (PRIM_ARC_T *) (prb);
-  color.pixel = data->clr;
   O = data->o;
   R = data->r;
   A1 = data->alpha;
@@ -121,7 +110,6 @@ prp_arc_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
   A.y = O.y + R;
   a = rescale (psc, A);
   r = (int) (2. * (R * psc.K + .5));
-  gdk_gc_set_foreground (gc, &color);
   A2 = A2 - A1;
   if (A2 < 0.)
     A2 += 2. * M_PI;
@@ -133,7 +121,6 @@ prp_arc_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
 void
 prp_text_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
 {
-  GdkColor color;
   pr_point O;
   pr_real S, A1;
   GdkPoint o;
@@ -142,7 +129,6 @@ prp_text_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc, void *prb)
   cairo_t *cr;
   cairo_pattern_t *pattern;
   data = (PRIM_TEXT_T *) (prb);
-  color.pixel = data->clr;
   o = rescale (psc, data->o);
   cr = gdk_cairo_create (drawable);
   cairo_translate (cr, o.x, o.y);
@@ -167,14 +153,11 @@ void
 prp_sqr_bezier_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc,
 		    void *prb)
 {
-  GdkColor color;
   int i, N;
   pr_point p1, p0, p2, O, A;
   GdkPoint a, b;
   PRIM_SQR_BEZIER_T *data;
   data = (PRIM_SQR_BEZIER_T *) (prb);
-  color.pixel = data->clr;
-  gdk_gc_set_foreground (gc, &color);
   p0 = data->a;
   p1 = data->b;
   p2 = data->c;
@@ -209,14 +192,11 @@ void
 prp_cub_bezier_gdk (GdkDrawable * drawable, GdkGC * gc, pr_scale psc,
 		    void *prb)
 {
-  GdkColor color;
   int i, N;
   pr_point p1, p0, p2, p3, O, A;
   GdkPoint a, b;
   PRIM_CUB_BEZIER_T *data;
   data = (PRIM_CUB_BEZIER_T *) (prb);
-  color.pixel = data->clr;
-  gdk_gc_set_foreground (gc, &color);
   p0 = data->a;
   p1 = data->b;
   p2 = data->c;

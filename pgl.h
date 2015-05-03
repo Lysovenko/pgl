@@ -50,21 +50,18 @@ typedef struct
   int is_first;
 } BoundingBox;
 PglPlot *pri_init (pr_real w, pr_real h);
-PglPlot *pri_line (PglPlot *, pr_point A, pr_point B, pr_color clr);
-PglPlot *pri_rectangle (PglPlot *, pr_point A, pr_point B, PSI fill,
-			pr_color clr);
-PglPlot *pri_circle (PglPlot *, pr_point O, pr_real R, pr_color clr);
-PglPlot *pri_arc (PglPlot *, pr_point O, pr_real R, pr_real A1, pr_real A2,
-		  pr_color clr);
-PglPlot *pri_sqr_bezier (PglPlot *, pr_point p0, pr_point p1, pr_point p2,
-			 pr_color clr);
+PglPlot *pri_line (PglPlot *, pr_point A, pr_point B);
+PglPlot *pri_rectangle (PglPlot *, pr_point A, pr_point B, PSI fill);
+PglPlot *pri_circle (PglPlot *, pr_point O, pr_real R);
+PglPlot *pri_arc (PglPlot *, pr_point O, pr_real R, pr_real A1, pr_real A2);
+PglPlot *pri_sqr_bezier (PglPlot *, pr_point p0, pr_point p1, pr_point p2);
 PglPlot *pri_cub_bezier (PglPlot *, pr_point p0, pr_point p1, pr_point p2,
-			 pr_point p3, pr_color clr);
+			 pr_point p3);
 PglPlot *pri_group_del (PglPlot *, PSI group_id);
 PglPlot *pri_group_end (PglPlot *, PSI group_id);
 PglPlot *pri_group_start (PglPlot *, PSI group_id);
 PglPlot *pri_text (PglPlot * plt, pr_point O, pr_real S, pr_real A1,
-		   const char *text, const char *family, pr_color clr);
+		   const char *text, const char *family);
 void pri_clear (PglPlot * plt);
 void prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot *);
 void prp_step_by_step_eps (FILE * psf, pr_scale psc, PglPlot *);

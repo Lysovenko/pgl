@@ -43,46 +43,38 @@ typedef struct
 typedef struct
 {
   pr_point a, b;
-  pr_color clr;
 } PRIM_LINE_T;
 typedef struct
 {
   pr_point a, b;
   PSI fill;
-  pr_color clr;
 } PRIM_RECTANGLE_T;
 typedef struct
 {
   pr_point a;
-  pr_color clr;
 } PRIM_POINT_T;
 typedef struct
 {
   pr_point o;
   pr_real r;
-  pr_color clr;
 } PRIM_CIRCLE_T;
 typedef struct
 {
   pr_point o;
   pr_real r, alpha, beta;
-  pr_color clr;
 } PRIM_ARC_T;
 typedef struct
 {
   pr_point o;
   pr_real s, alpha;
   char *text, *family;
-  pr_color clr;
 } PRIM_TEXT_T;
 typedef struct
 {
   pr_point a, b, c;
-  pr_color clr;
 } PRIM_SQR_BEZIER_T;
 typedef struct
 {
   pr_point a, b, c, d;
-  pr_color clr;
 } PRIM_CUB_BEZIER_T;
 #endif
