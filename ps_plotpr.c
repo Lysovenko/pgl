@@ -117,25 +117,23 @@ NULL, prp_line_ps, NULL, prp_circle_ps, prp_arc_ps,
 void
 prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot * prb)
 {
-  int position = 0, len = prb->size;;
+  int position = 0;
+  GArray *queue = prb->queue;
   ps_data psd;
   psd.psc = psc;
   psd.cur_pt.x = 1e100;
   psd.cur_pt.y = 1e100;
   setlocale (LC_NUMERIC, "C");
   fputs ("newpath\n", psf);
-  while (len > position)
+  while (queue->len > position)
     {
-      PSI str_size = ((PRIM_ITEM_T *) (prb->data + position))->size,
-	type = ((PRIM_ITEM_T *) (prb->data + position))->type;
+      PRIM_ITEM_T item = g_array_index (queue, PRIM_ITEM_T, position);
       void (*ploter) (FILE *, ps_data *, void *) = NULL;
-      /* ensure array index to be correct */
-      if (type >= 0 && type < PRIMITIVES_SIZE)
-	ploter = ploters[type];
-      position += sizeof (PRIM_ITEM_T);
+      if (item.type >= 0 && item.type < PRIMITIVES_SIZE)
+	ploter = ploters[item.type];
       if (ploter)
-	ploter (psf, &psd, prb->data + position);
-      position += str_size;
+	ploter (psf, &psd, item.data);
+      position++;
     }
   fputs ("1 setlinewidth\nstroke\nshowpage\n", psf);
   setlocale (LC_NUMERIC, "");
@@ -144,7 +142,8 @@ prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot * prb)
 void
 prp_step_by_step_eps (FILE * psf, pr_scale psc, PglPlot * prb)
 {
-  int position = 0, len = prb->size;
+  int position = 0;
+  GArray *queue = prb->queue;
   BoundingBox bBox;
   ps_data psd;
   psd.psc = psc;
@@ -160,18 +159,16 @@ prp_step_by_step_eps (FILE * psf, pr_scale psc, PglPlot * prb)
 	     (bBox.ur.x + psd.psc.x) * psd.psc.K,
 	     (bBox.ur.y + psd.psc.y) * psd.psc.K);
   fputs ("newpath\n", psf);
-  while (len > position)
+  while (queue->len > position)
     {
-      PSI str_size = ((PRIM_ITEM_T *) (prb->data + position))->size,
-	type = ((PRIM_ITEM_T *) (prb->data + position))->type;
+      PRIM_ITEM_T item = g_array_index (queue, PRIM_ITEM_T, position);
       void (*ploter) (FILE *, ps_data *, void *) = NULL;
       /* ensure array index to be correct */
-      if (type >= 0 && type < PRIMITIVES_SIZE)
-	ploter = ploters[type];
-      position += sizeof (PRIM_ITEM_T);
+      if (item.type >= 0 && item.type < PRIMITIVES_SIZE)
+	ploter = ploters[item.type];
       if (ploter)
-	ploter (psf, &psd, prb->data + position);
-      position += str_size;
+	ploter (psf, &psd, item.data);
+      position++;
     }
   fputs ("1 setlinewidth\nstroke\n", psf);
   setlocale (LC_NUMERIC, "");

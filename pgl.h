@@ -30,7 +30,7 @@ typedef
 }
 #else
   void
-#fi
+#endif
   PglPlot;
 typedef PglPlot *PrimBuf;
 typedef struct
@@ -68,9 +68,11 @@ PglPlot *pri_group_start (PglPlot *, PSI group_id);
 PglPlot *pri_text (PglPlot * plt, pr_point O, pr_real S, pr_real A1,
 		   const char *text, const char *family);
 void pri_clear (PglPlot * plt);
+#ifdef _STDIO_H
 void prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot *);
 void prp_step_by_step_eps (FILE * psf, pr_scale psc, PglPlot *);
 void prp_step_by_step_svg (FILE * svgf, pr_scale psc, PglPlot *);
+#endif
 void prp_step_by_step_BB (BoundingBox * bBox, PglPlot *);
 #ifdef __GDK_H__
 void prp_step_by_step_gdk (GdkDrawable * drawable, GdkGC * gc, PglPlot *);
