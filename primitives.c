@@ -20,6 +20,7 @@
 #include <math.h>
 #include <glib.h>
 #include <string.h>
+#include "pgl.h"
 #include "primitives.h"
 PglPlot *
 pri_init (pr_real w, pr_real h)
@@ -140,7 +141,6 @@ pri_cub_bezier (PglPlot * plt, pr_point p0, pr_point p1, pr_point p2,
   return plt;
 }
 
-/*********************************************/
 PglPlot *
 pri_group_start (PglPlot * plt, PSI group_id)
 {
@@ -164,41 +164,31 @@ pri_group_end (PglPlot * plt, PSI group_id)
 PglPlot *
 pri_group_del (PglPlot * plt, PSI group_id)
 {
-  int size, start = 0, end = 0;
-  size = plt->size;
+  int start = 0;
   int position;
-  short int mode;
+  GArray *queue = plt->queue;
   position = 0;
-  while (size > position)
+  while (queue->len > position)
     {
-      PSI str_size;
-      mode = ((PRIM_ITEM_T *) (plt->data + position))->type;
-      str_size = ((PRIM_ITEM_T *) (plt->data + position))->size;
-      position += sizeof (PRIM_ITEM_T);
-      switch (mode)
+      PRIM_ITEM_T item = g_array_index (queue, PRIM_ITEM_T, position);
+      switch (item.type)
 	{
 	case PRIM_GROUP_START:
-	  if (group_id == *(PSI *) (plt->data + position))
-	    start = position - sizeof (PRIM_ITEM_T);
+	  if (group_id == *((PSI *) item.data))
+	    start = position;
 	  break;
 	case PRIM_GROUP_END:
-	  if (group_id == *(PSI *) (plt->data + position))
+	  if (group_id == *((PSI *) item.data))
 	    {
-	      end = position + sizeof (PSI);
-	      if (end > start)
+	      if (position > start)
 		{
-		  memmove (plt->data + start, plt->data + end, size - end);
-		  plt->data = g_realloc (plt->data, size - (end - start));
-		  size -= end - start;
-		  position -= end - start;
-		  start = end = 0;
+		  g_array_remove_range (queue, start, position - start + 1);
 		}
 	    }
 	  break;
 	}
-      position += str_size;
+      position++;
     }
-  plt->size = size;
   return plt;
 }
 
