@@ -265,12 +265,12 @@ NULL, prp_line_gdk, prp_rectangle_gdk, prp_circle_gdk, prp_arc_gdk,
 void
 prp_step_by_step_gdk (GdkDrawable * drawable, GdkGC * gc, PglPlot * prb)
 {
-  int position, len = prb->size;
+  int position = 0;
+  GArray *queue = prb->queue;
   pr_scale psc;
   int H, W;
   pr_real h, w;
   GdkColor color;
-
   color.pixel = 0;
   gdk_gc_set_foreground (gc, &color);
   h = prb->h;
@@ -289,18 +289,13 @@ prp_step_by_step_gdk (GdkDrawable * drawable, GdkGC * gc, PglPlot * prb)
       psc.y = 0.;
     }
   psc.H = H;
-  position = 0;
-  while (len > position)
+  for (position = 0; position < queue->len; position++)
     {
-      PSI str_size = ((PRIM_ITEM_T *) (prb->data + position))->size,
-	type = ((PRIM_ITEM_T *) (prb->data + position))->type;
+      PRIM_ITEM_T item = g_array_index (queue, PRIM_ITEM_T, position);
       void (*ploter) (GdkDrawable *, GdkGC *, pr_scale, void *) = NULL;
-      /* ensure array index to be correct */
-      if (type >= 0 && type < PRIMITIVES_SIZE)
-	ploter = ploters[type];
-      position += sizeof (PRIM_ITEM_T);
+      if (item.type >= 0 && item.type < PRIMITIVES_SIZE)
+	ploter = ploters[item.type];
       if (ploter)
-	ploter (drawable, gc, psc, prb->data + position);
-      position += str_size;
+	ploter (drawable, gc, psc, item.data);
     }
 }
