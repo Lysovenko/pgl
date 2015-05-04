@@ -125,7 +125,7 @@ prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot * prb)
   psd.cur_pt.y = 1e100;
   setlocale (LC_NUMERIC, "C");
   fputs ("newpath\n", psf);
-  while (queue->len > position)
+  for (position = 0; position < queue->len; position++)
     {
       PRIM_ITEM_T item = g_array_index (queue, PRIM_ITEM_T, position);
       void (*ploter) (FILE *, ps_data *, void *) = NULL;
@@ -133,7 +133,6 @@ prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot * prb)
 	ploter = ploters[item.type];
       if (ploter)
 	ploter (psf, &psd, item.data);
-      position++;
     }
   fputs ("1 setlinewidth\nstroke\nshowpage\n", psf);
   setlocale (LC_NUMERIC, "");
@@ -159,16 +158,14 @@ prp_step_by_step_eps (FILE * psf, pr_scale psc, PglPlot * prb)
 	     (bBox.ur.x + psd.psc.x) * psd.psc.K,
 	     (bBox.ur.y + psd.psc.y) * psd.psc.K);
   fputs ("newpath\n", psf);
-  while (queue->len > position)
+  for (position = 0; position < queue->len; position++)
     {
       PRIM_ITEM_T item = g_array_index (queue, PRIM_ITEM_T, position);
       void (*ploter) (FILE *, ps_data *, void *) = NULL;
-      /* ensure array index to be correct */
       if (item.type >= 0 && item.type < PRIMITIVES_SIZE)
 	ploter = ploters[item.type];
       if (ploter)
 	ploter (psf, &psd, item.data);
-      position++;
     }
   fputs ("1 setlinewidth\nstroke\n", psf);
   setlocale (LC_NUMERIC, "");
