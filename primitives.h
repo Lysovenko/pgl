@@ -38,7 +38,8 @@ enum PRIMITIVES
 };
 typedef struct
 {
-  PSI type, size;
+  PSI type;
+  void *data;
 } PRIM_ITEM_T;
 typedef struct
 {

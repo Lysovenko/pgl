@@ -21,12 +21,17 @@
 #define __PGL_H__
 
 typedef double pr_real;
-typedef struct
+typedef
+#ifdef __G_LIB_H__
+  struct
 {
-  int size;
   pr_real w, h;
-  void *data;
-} PglPlot;
+  GArray *queue;
+}
+#else
+  void
+#fi
+  PglPlot;
 typedef PglPlot *PrimBuf;
 typedef struct
 {
