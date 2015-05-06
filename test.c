@@ -101,7 +101,10 @@ main (int argc, char **argv)
   {
     FILE *fp = stdout;		/* fopen("test.eps", "w"); */
     pr_scale psc = { 0., 0., 300., 10 };
+    fprintf (fp, "Here is PS output:\n");
     prp_step_by_step_ps (fp, psc, ext_prb);
+    fprintf (fp, "and now SVG:\n");
+    prp_step_by_step_svg (fp, psc, ext_prb);
     /* fclose(fp); */
   }
   g_print ("%g\n", 3.14159);
