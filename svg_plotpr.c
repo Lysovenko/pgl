@@ -51,28 +51,12 @@ prp_line_svg (FILE * svgf, pr_scale psc, void *prb)
 void
 prp_circle_svg (FILE * svgf, pr_scale psc, void *prb)
 {
-  pr_point O, A;
+  pr_point O;
   pr_real R;
   PRIM_CIRCLE_T *data = (PRIM_CIRCLE_T *) (prb);
-  A.x = O.x - R;
-  A.y = O.y + R;
-}
-
-void
-prp_arc_svg (FILE * svgf, pr_scale psc, void *prb)
-{
-  int r;
-  pr_point O, A;
-  pr_real R, A1, A2;
-  PRIM_ARC_T *data = (PRIM_ARC_T *) (prb);
-  A.x = O.x - R;
-  A.y = O.y + R;
-  r = (int) (2. * (R * psc.K + .5));
-  A2 = A2 - A1;
-  if (A2 < 0.)
-    A2 += 2. * M_PI;
-  A1 *= 360. * 64. / M_PI / 2.;
-  A2 *= 360. * 64. / M_PI / 2.;
+  O = prp_2svg (psc, data->o);
+  R = data->r * psc.K;
+  fprintf (svgf, "<circle cx=\"%lg\" cy=\"%lg\" r=\"%lg\" />", O.x, O.y, R);
 }
 
 void
@@ -91,10 +75,27 @@ prp_sqr_bezier_svg (FILE * svgf, pr_scale psc, void *prb)
   }
 }
 
+void
+prp_cub_bezier_svg (FILE * svgf, pr_scale psc, void *prb)
+{
+  pr_point p1, p0, p2, p3;
+  PRIM_CUB_BEZIER_T *data = (PRIM_CUB_BEZIER_T *) (prb);
+  p0 = prp_2svg (psc, data->a);
+  p1 = prp_2svg (psc, data->b);
+  p2 = prp_2svg (psc, data->c);
+  p3 = prp_2svg (psc, data->d);
+  {
+    fprintf (svgf,
+	     "<path d=\"M %lg %lg C %lg %lg  %lg %lg %lg %lg\""
+	     " fill=\"none\"/>\n",
+	     p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+  }
+}
+
 static void (*ploters[PRIMITIVES_SIZE]) (FILE *, pr_scale, void *) =
 {
-NULL, prp_line_svg, NULL, prp_circle_svg, prp_arc_svg,
-    NULL, prp_sqr_bezier_svg, NULL, NULL, NULL};
+NULL, prp_line_svg, NULL, prp_circle_svg, NULL,
+    NULL, prp_sqr_bezier_svg, prp_cub_bezier_svg, NULL, NULL};
 
 void
 prp_step_by_step_svg (FILE * svgf, pr_scale psc, PglPlot * prb)
