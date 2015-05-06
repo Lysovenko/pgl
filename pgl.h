@@ -73,7 +73,6 @@ void prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot *);
 void prp_step_by_step_eps (FILE * psf, pr_scale psc, PglPlot *);
 void prp_step_by_step_svg (FILE * svgf, pr_scale psc, PglPlot *);
 #endif
-void prp_step_by_step_BB (BoundingBox * bBox, PglPlot *);
 #ifdef __GDK_H__
 void prp_step_by_step_gdk (GdkDrawable * drawable, GdkGC * gc, PglPlot *);
 void prp_gdk_pointer (GdkWindow * window, PglPlot *, pr_point *

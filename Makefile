@@ -4,7 +4,7 @@ GTKFLAGS = `pkg-config gtk+-2.0 --cflags`
 QINC = -I$(HOME)/include
 CFLAGS = -O2 -Wall `pkg-config glib-2.0 --cflags`
 
-OBJS = gdk_plotpr.o primitives.o ps_plotpr.o svg_plotpr.o area_plotgr.o
+OBJS = gdk_plotpr.o primitives.o ps_plotpr.o svg_plotpr.o
 all: libpgl.so test
 libpgl.so: $(OBJS)
 	gcc --shared $(GTKLIBS) $(OBJS) -o libpgl.so $(CFLAGS)

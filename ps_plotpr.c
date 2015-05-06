@@ -137,36 +137,3 @@ prp_step_by_step_ps (FILE * psf, pr_scale psc, PglPlot * prb)
   fputs ("1 setlinewidth\nstroke\nshowpage\n", psf);
   setlocale (LC_NUMERIC, "");
 }
-
-void
-prp_step_by_step_eps (FILE * psf, pr_scale psc, PglPlot * prb)
-{
-  int position = 0;
-  GArray *queue = prb->queue;
-  BoundingBox bBox;
-  ps_data psd;
-  psd.psc = psc;
-  psd.cur_pt.x = 1e100;
-  psd.cur_pt.y = 1e100;
-  setlocale (LC_NUMERIC, "C");
-  prp_step_by_step_BB (&bBox, prb);
-  psd.psc.x = -bBox.ll.x;
-  psd.psc.y = -bBox.ll.y;
-  g_fprintf (psf,
-	     "%%!PS-Adobe-2.0 EPSF-2.0\n%%%%Creator: pgl\n"
-	     "%%%%BoundingBox: 0 0 %g %g\n%%%%EndComments\n",
-	     (bBox.ur.x + psd.psc.x) * psd.psc.K,
-	     (bBox.ur.y + psd.psc.y) * psd.psc.K);
-  fputs ("newpath\n", psf);
-  for (position = 0; position < queue->len; position++)
-    {
-      PRIM_ITEM_T item = g_array_index (queue, PRIM_ITEM_T, position);
-      void (*ploter) (FILE *, ps_data *, void *) = NULL;
-      if (item.type >= 0 && item.type < PRIMITIVES_SIZE)
-	ploter = ploters[item.type];
-      if (ploter)
-	ploter (psf, &psd, item.data);
-    }
-  fputs ("1 setlinewidth\nstroke\n", psf);
-  setlocale (LC_NUMERIC, "");
-}
