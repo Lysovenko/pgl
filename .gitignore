@@ -1,6 +1,4 @@
 # python module was planned
 py
-*.so
-test
-*.o
 *~
+build
