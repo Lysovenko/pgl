@@ -106,10 +106,10 @@ pri_text (PglPlot * plt, pr_point O, pr_real S, pr_real A1,
   data->o = O;
   data->s = S;
   data->alpha = alp;
-  data->text = ((void *) data) + size;
+  data->text = ((char *) data) + size;
   strcpy (data->text, text);
   size += slen;
-  data->family = ((void *) data) + size;
+  data->family = ((char *) data) + size;
   strcpy (data->family, family);
   g_array_append_val (plt->queue, item);
   return plt;
