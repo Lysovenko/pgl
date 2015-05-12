@@ -3,7 +3,11 @@ __Primitives graphics library__
 
 Simple 2d graphics library intended to unify process of creating vector graphics files and plotting on screen.
 ## Installation
-Just unpak and make. Makefile written for gcc. Configure script is planned.
+
+* Make your build directory. E.g. <code>mkdir build</code> in folder with sources.
+* Configure with CMake: <code>cmake ..</code> (replace <<..>> with path to sources.
+* Do <code>make install</code> if you are using UNIX system or something like in other systems.
+
 # API
 
 <code>PglPlot *pri_init (pr_real w, pr_real h);</code>
